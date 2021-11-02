@@ -1,0 +1,22 @@
+fmod ARBIN is
+    sort Arbin .
+    op abv: -> Arbin [ctor] .
+    op _[_,_]_ : Arbin Nat Nat Arbin -> Arbin [ctor] .
+    vars D I : Arbin .
+    vars C V N N': Nat .
+    op mezcla: Nat Nat -> Nat .
+        eq mezcla(N, N') = N + N' .
+    op inserta : Arbin Nat Nat -> Arbin .
+        eq inserta(abv, C, V) = abv [C, V] abv .
+        eq inserta(I [C, V] D, C', V') = inserta(I, C', V') [C, V] D
+            if C' < C .
+        eq inserta(I [C, V] D, C', V') = I [C, V] inserta(D, C', V')
+            if C' < C .
+        eq inserta(I [C, V] D, C, V') = I [C, mezcla(V, V')] D .
+    op busca : Arbin Nat ~> Nat .
+        eq busca(I [C, V] D, C) = V .
+        eq busca(I [C, V] D, C') = 
+            if C' < C 
+                then busca(D, C')
+                else busca(I, C')
+            fi [owise] .
