@@ -1,4 +1,4 @@
-# Sistemas de gestión de datos y de la información (SGDI)
+# Sistemas empotrados (SE)
 
 Contenido de la asignatura:
 
