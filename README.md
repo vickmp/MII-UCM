@@ -1,6 +1,6 @@
 # Máster en Ingeniería Informática
 
-Repositorio de los trabajos y prácticas realizados en el [Master Universitario en Ingiería Informática de la Universidad Complutense de Madrid (UCM)](https://informatica.ucm.es/master-en-ingenieria-informatica).
+Repositorio de los trabajos y ejercicios realizados en el [Master Universitario en Ingiería Informática de la Universidad Complutense de Madrid (UCM)](https://informatica.ucm.es/master-en-ingenieria-informatica).
 
 ## Plan de estudios
 
