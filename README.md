@@ -2,6 +2,8 @@
 
 Repositorio de los trabajos y ejercicios realizados en el [Master Universitario en Ingiería Informática de la Universidad Complutense de Madrid (UCM)](https://informatica.ucm.es/master-en-ingenieria-informatica).
 
+Comencé este master en septiembre de 2021, por lo que todavía no está finalizado.
+Este repositorio se irá actualizando con los nuevos trabajos realizados a medida que se vayan completando.
 ## Plan de estudios
 
 El plan de estudios realizado consta de las siguientes asignaturas:
@@ -25,7 +27,7 @@ El plan de estudios realizado consta de las siguientes asignaturas:
     <td class="tg-0pky">Gestión de empresas de base tecnológica y sistemas informáticos (EBT)</td>
   </tr>
   <tr>
-    <td class="tg-lboi" rowspan="8">Tecnologías Informáticas</td>
+    <td class="tg-lboi" rowspan="9">Tecnologías Informáticas</td>
     <td class="tg-lboi" rowspan="5">Ingeniería del Software y Sistemas Informáticos</td>
     <td class="tg-0pky">Gráficos por computador (GC)</td>
   </tr>
@@ -42,7 +44,10 @@ El plan de estudios realizado consta de las siguientes asignaturas:
     <td class="tg-0pky">Auditoría, calidad y fiabilidad informáticas (ACFI)</td>
   </tr>
   <tr>
-    <td class="tg-lboi" rowspan="3">Arquitectura y Redes de Computadores</td>
+    <td class="tg-lboi" rowspan="4">Arquitectura y Redes de Computadores</td>
+    <td class="tg-0pky">Sistemas empotrados (SE)</td>
+  </tr>
+    <tr>
     <td class="tg-0pky">Sistemas empotrados distribuidos (SED)</td>
   </tr>
   <tr>
