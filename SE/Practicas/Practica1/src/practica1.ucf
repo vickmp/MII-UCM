@@ -1,0 +1,18 @@
+NET clk_in LOC=T9;
+NET rst LOC=E11;
+NET btn LOC=A13; 
+
+NET num1(1) LOC=L5;
+NET num1(0) LOC=N2;
+NET num2(1) LOC =M3;
+NET num2(0) LOC=N1;
+NET num3(1) LOC=T13;
+NET num3(0) LOC=L15;
+
+NET big_reward(0) loc=E2;
+NET big_reward(1) loc=E1;
+NET big_reward(2) loc=F3;
+NET big_reward(3) loc=F2;
+NET big_reward(4) loc=G4;
+NET big_reward(5) loc=G3;
+NET small_reward loc=G1;

@@ -1,0 +1,49 @@
+#salida del oscilador a 50MHz
+NET clk_pin LOC=P8;
+NET "clk_pin" FLOAT;
+
+#switches placa superior
+NET rst_pin LOC=K4;
+NET "rst_pin" FLOAT;
+
+# entradas /salidas puerto serie
+NET rx_pin LOC=G5;
+NET "rx_pin" FLOAT;
+NET tx_pin LOC=J2;
+NET "tx_pin" FLOAT;
+
+#barra de leds placa extendida
+NET leds<0> LOC=H15;
+NET leds<1> LOC=J13;
+NET leds<2> LOC=L15;
+NET leds<3> LOC=T13;
+NET leds<4> LOC=N1;
+NET leds<5> LOC=M3;
+NET leds<6> LOC=N2;
+NET leds<7> LOC=L5;
+NET "leds<0>" FLOAT;
+NET "leds<1>" FLOAT;
+NET "leds<2>" FLOAT;
+NET "leds<3>" FLOAT;
+NET "leds<4>" FLOAT;
+NET "leds<5>" FLOAT;
+NET "leds<6>" FLOAT;
+NET "leds<7>" FLOAT;
+
+#switches placa extendida
+NET switches<0> LOC=P12;
+NET switches<1> LOC=J1;
+NET switches<2> LOC=H1;
+NET switches<3> LOC=H3;
+NET switches<4> LOC=G2;
+NET switches<5> LOC=K15;
+NET switches<6> LOC=K16;
+NET switches<7> LOC=F15;
+NET "switches<0>" FLOAT;
+NET "switches<1>" FLOAT;
+NET "switches<2>" FLOAT;
+NET "switches<3>" FLOAT;
+NET "switches<4>" FLOAT;
+NET "switches<5>" FLOAT;
+NET "switches<6>" FLOAT;
+NET "switches<7>" FLOAT;
