@@ -1,0 +1,144 @@
+fmod PERSONA is
+ pr STRING .
+
+ sort Persona .
+
+ op <_,_> : String Nat -> Persona .
+
+ vars S S' : String .
+ vars N N' : Nat .
+
+ ops max min : Persona Persona -> Persona [comm] .
+
+ ceq max(< S, N >, < S', N' >) = < S, N >
+  if N >= N' .
+ ceq min(< S, N >, < S', N' >) = < S, N >
+  if N <= N' .
+
+ ops _<=_ _>_ : Persona Persona -> Bool .
+ eq < S, N > <= < S', N' > = N <= N' .
+ eq < S, N > > < S', N' > = N > N' .
+
+ *** Para hacer tests de manera más clara
+ ops a b c d : -> Persona .
+ eq a = < "a", 100 > .
+ eq b = < "b", 80 > .
+ eq c = < "c", 150 > .
+ eq d = < "d", 10 > .
+endfm
+
+fmod LISTA is
+ pr PERSONA .
+
+ sort Lista ListaOrd .
+ subsort Persona < ListaOrd < Lista .
+
+ op lv : -> ListaOrd [ctor] .
+ op __ : Lista Lista -> Lista [ctor assoc id: lv] .
+
+ vars P P' : Persona .
+ vars L L' : Lista .
+ var  LO : ListaOrd .
+
+ mb lv : ListaOrd .
+ cmb P P' L : ListaOrd
+  if P <= P' /\
+     P' L : ListaOrd .
+
+ op head : Lista ~> Persona .
+ eq head(P L) = P .
+
+ op tail : Lista ~> Lista .
+ eq tail(P L) = L .
+
+ op tam : Lista -> Nat .
+ eq tam(lv) = 0 .
+ eq tam(P L) = s(tam(L)) .
+
+ op esta? : Lista Persona -> Bool .
+ eq esta?(L P L', P) = true .
+ eq esta?(L, P) = false [owise] .
+
+ op ordena : Lista -> Lista .
+ ceq ordena(L P P' L') = ordena(L P' P L')
+  if P > P' .
+ eq ordena(L) = L [owise] .
+
+ op inserta-ord : ListaOrd Persona -> ListaOrd .
+ eq inserta-ord(lv, P) = P .
+ eq inserta-ord(P L, P') = if P <= P'
+                           then P inserta-ord(L, P')
+                           else P' P L
+                           fi .
+endfm
+
+fmod CONJUNTO is
+ pr PERSONA .
+
+ sort Cjto .
+ subsort Persona < Cjto .
+
+ op cv : -> Cjto [ctor] .
+ op _,_ : Cjto Cjto -> Cjto [ctor assoc comm id: cv] .
+endfm
+
+mod UNIVERSIDAD is
+ pr LISTA .
+ pr CONJUNTO .
+
+ sort Universidad .
+
+ op [_|_|_]_ : Cjto ListaOrd Cjto Nat -> Universidad [ctor] .
+
+ var  P : Persona .
+ vars C C' : Cjto .
+ var  N : Nat .
+ var  LO : ListaOrd .
+
+ rl [(P, C) | LO | C'] N
+ => [C | inserta-ord(LO, P) | C'] N .
+
+ rl [C | P LO | C'] s(N)
+ => [C | LO | (C', P)] N .
+endm
+
+load model-checker.maude
+
+mod PROPS is
+ pr UNIVERSIDAD .
+ pr SATISFACTION .
+
+ subsort Universidad < State .
+
+ var  S : String .
+ vars C C' : Cjto .
+ vars N N' : Nat .
+ var  LO : ListaOrd .
+ var  U : Universidad .
+
+ op espera : String -> Prop [ctor] .
+ op dentro : String -> Prop [ctor] .
+
+ eq [(< S, N >, C) | LO | C' ] N'  |= espera(S) = true .
+ eq U |= espera(S) = false [owise] .
+
+ eq [C | LO | (< S, N >, C')] N' |= dentro(S) = true .
+ eq U |= dentro(S) = false [owise] .
+endm
+
+mod UNIV-TEST is
+ pr PROPS .
+ pr MODEL-CHECKER .
+ pr LTL-SIMPLIFIER .
+
+ op u : -> Universidad .
+ eq u = [(a, b, c, d) | lv | cv] 3 .
+endm
+
+red modelCheck(u, [] (espera("a") -> <> dentro("a"))) .
+
+eof
+
+rew [(a, b, c, d) | lv | cv] 3 .
+
+search [(a, b, c, d) | lv | cv] 3 =>* [C:Cjto | LO:ListaOrd | (C':Cjto, < "c", 150 >)] N:Nat .

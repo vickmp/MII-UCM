@@ -1,0 +1,55 @@
+load model-checker.maude
+
+mod SC is
+ pr NAT .
+
+ sorts Proceso Grupo .
+ subsort Proceso < Grupo .
+
+ op vacio : -> Grupo [ctor] .
+ op __ : Grupo Grupo -> Grupo [ctor assoc comm id: vacio] .
+
+ ops i e sc : Nat -> Proceso .
+
+ var N : Nat .
+
+ rl [inactivo-esperando] : i(N) => e(N) .
+ rl [esperando-sc] : e(N) => sc(N) .
+ rl [sc-inactivo] : sc(N) => i(N) .
+endm
+
+mod PROPS is
+ pr SC .
+ pr SATISFACTION .
+
+ subsort Grupo < State .
+
+ ops inactivo esperando crit : Nat -> Prop [ctor] .
+
+ var N : Nat .
+ var G : Grupo .
+
+ eq i(N) G |= inactivo(N) = true .
+ eq e(N) G |= esperando(N) = true .
+ eq sc(N) G |= crit(N) = true .
+endm
+
+mod CHECK is
+ pr PROPS .
+ pr LTL-SIMPLIFIER .
+ pr MODEL-CHECKER .
+
+ op init : -> Grupo .
+ eq init = i(1) i(2) .
+endm
+
+eof
+
+red modelCheck(init, [] (esperando(1) -> <> crit(1))) .
+reduce in CHECK : modelCheck(init, [](esperando(1) -> <> crit(1))) .
+rewrites: 32 in 1ms cpu (23ms real) (22099 rewrites/second)
+result ModelCheckResult: counterexample(
+ {i(1) i(2),'inactivo-esperando},
+ {i(2) e(1),'inactivo-esperando}
+ {e(1) e(2),'esperando-sc}
+ {e(1) sc(2),'sc-inactivo})

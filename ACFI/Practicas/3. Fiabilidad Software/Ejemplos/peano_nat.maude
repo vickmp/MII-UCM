@@ -1,0 +1,53 @@
+*** El módulo empieza con la palabra reservada fmod, seguido del nombre del
+*** módulo y de la palabra reservada is
+fmod Peano is
+
+ *** La palabra "sort" indica los tipos que vamos a usar.
+ sort PeanoNat .
+
+ *** Los operadores definen las funciones del módulo. En este caso además tenemos
+ *** el atributo "ctor", por lo que son constructores. Los constructores de los
+ *** naturales son el 0 y la función sucesor (que recibe otro natural como argumento).
+ op 0 : -> PeanoNat [ctor] .
+ op s : PeanoNat -> PeanoNat [ctor] .
+
+ *** Declaramos N y M como variables de tipo PeanoNat
+ vars N M : PeanoNat .
+
+ *** Definimos la suma, los _ indican dónde se van a colocar los valores.
+ *** Además, la suma es asociativa y conmutativa.
+ op _+_ : PeanoNat PeanoNat -> PeanoNat [assoc comm] .
+ *** Las ecuaciones definen cómo se comporta la función.
+ *** En general, las ecuaciones para todas las funciones deben distinguir
+ *** según las constructoras en alguno de los argumentos.
+ eq [s1] : 0 + N = N .
+ eq [s2] : s(N) + M = s(N + M) .
+
+ op _*_ : PeanoNat PeanoNat -> PeanoNat [assoc comm] .
+ eq 0 * N = 0 .
+ eq s(N) * M = M + (N * M) .
+
+ *** La función "positivo?" comprueba si un número es mayor que 0.
+ op esPositivo : PeanoNat -> Bool .
+ eq esPositivo(0) = false .
+ eq esPositivo(s(N)) = true .
+*** El módulo acaba con la palabra reservada "endfm"
+endfm
+
+*** 1 + 2 en notación sucesor. Debe devolver s(s(s())), es decir, 3
+red s(0) + (s(s(0))) .
+
+*** 1 + 2 + 6 = 9
+red s(0) + s(s(0)) + s(s(s(s(s(s(0)))))) .
+
+*** 2 * 3 = 6
+red s(s(0)) * s(s(s(0))) .
+
+*** 2 * 0 = 0
+red s(s(0)) * 0 .
+
+*** false
+red esPositivo(0) .
+
+*** true
+red esPositivo(s(s(0))) .

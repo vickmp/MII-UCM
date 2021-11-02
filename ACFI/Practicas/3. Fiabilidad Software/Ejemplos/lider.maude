@@ -1,0 +1,119 @@
+load model-checker.maude
+
+mod LIDER is
+  pr QID .
+
+  sorts Mode Node Configuration Attribute AttributeSet Msg .
+
+  ops idle activo lider : -> Mode [ctor] .
+
+  subsort Attribute < AttributeSet .
+
+  op mt : -> AttributeSet [ctor] .
+  op _,_ : AttributeSet AttributeSet -> AttributeSet [ctor assoc comm id: mt] .
+
+  op modo`:_ : Mode -> Attribute [ctor] .
+  op prioridad`:_ : Nat -> Attribute [ctor] .
+  op siguiente`:_ : Qid -> Attribute [ctor] .
+
+  subsort Msg Node < Configuration .
+
+  op none : -> Configuration [ctor] .
+  op __ : Configuration Configuration -> Configuration [ctor assoc comm id: none] .
+
+  op <_|_> : Qid AttributeSet -> Node [ctor] .
+
+  op to_:_ : Qid Nat -> Msg [ctor] .
+
+  var  AtS : AttributeSet .
+  vars N N' : Nat .
+  vars O O' : Qid .
+
+  rl [activar] :
+     < O  | modo : idle, siguiente : O', prioridad : N >
+  => < O  | modo : activo, siguiente : O', prioridad : N >
+     (to O' : N) .
+
+  crl [borrar] :
+      (to O : N)
+      < O | modo : activo, prioridad : N', AtS >
+   => < O | modo : activo, prioridad : N', AtS >
+   if N < N' .
+
+  crl [reenviar] :
+      (to O : N)
+      < O | modo : activo, prioridad : N', siguiente : O' >
+   => < O | modo : activo, prioridad : N', siguiente : O' >
+      (to O' : N)
+   if N > N' .
+
+  rl [lider] :
+     (to O : N)
+     < O | modo : activo, prioridad : N, AtS >
+  => < O | modo : lider, prioridad : N, AtS > .
+
+  op init : -> Configuration .
+  eq init = < 'n1 | modo : idle, prioridad : 1, siguiente : 'n2 >
+            < 'n2 | modo : idle, prioridad : 2, siguiente : 'n3 >
+            < 'n3 | modo : idle, prioridad : 3, siguiente : 'n4 >
+            < 'n4 | modo : idle, prioridad : 4, siguiente : 'n5 >
+            < 'n5 | modo : idle, prioridad : 5, siguiente : 'n1 > .
+endm
+
+mod INVARIANTE is
+  pr LIDER .
+
+  var AtS : AttributeSet .
+  var C : Configuration .
+  var O : Qid .
+
+  op numLideres : Configuration -> Nat .
+  eq numLideres(< O | modo : lider, AtS > C) = 1 + numLideres(C) .
+  eq numLideres(C) = 0 [owise] .
+
+  op 1lider : Configuration -> Bool .
+  eq 1lider(C) = numLideres(C) <= 1 .
+endm
+
+rew init .
+
+search init =>* C:Configuration s.t. not 1lider(C:Configuration) .
+
+mod PROPS is
+  pr SATISFACTION .
+  pr LIDER .
+
+  subsort Configuration < State .
+
+  op hayLider : -> Prop [ctor] .
+  ops idle activo esLider : Qid -> Prop [ctor] .
+
+  var AtS : AttributeSet .
+  var C : Configuration .
+  var O : Qid .
+
+  eq < O | modo : lider, AtS > C |= hayLider = true .
+  eq < O | modo : lider, AtS > C |= esLider(O) = true .
+  eq < O | modo : idle, AtS > C |= idle(O) = true .
+  eq < O | modo : idle, AtS > C |= activo(O) = true .
+endm
+
+mod CHECK is
+  pr PROPS .
+  pr MODEL-CHECKER .
+  pr LTL-SIMPLIFIER .
+
+***(
+  *** Disponible en LIDER
+  op init : -> Configuration .
+  eq init = < 'n1 | modo : idle, prioridad : 1, siguiente : 'n2 >
+            < 'n2 | modo : idle, prioridad : 2, siguiente : 'n3 >
+            < 'n3 | modo : idle, prioridad : 3, siguiente : 'n4 >
+            < 'n4 | modo : idle, prioridad : 4, siguiente : 'n5 >
+            < 'n5 | modo : idle, prioridad : 5, siguiente : 'n1 > .
+)
+endm
+
+red modelCheck(init, <> hayLider -> <> esLider('n5)) .
+red modelCheck(init, <> esLider('n5)) .
+red modelCheck(init, idle('n1) -> <> idle('n1)) .

@@ -1,0 +1,66 @@
+
+fmod PILA is
+ *** Importamos los naturales predefinidos.
+ pr NAT .
+
+ sort Pila .
+
+ *** Las constructoras de las pilas son la pila vacía y la función "apila"
+ op pila-vacia : -> Pila [ctor] .
+ op apila : Nat Pila -> Pila [ctor] .
+
+ var N : Nat .
+ var P : Pila .
+
+ *** La función desapila no modifica la pila si era vacía.
+ op desapila : Pila -> Pila .
+ eq desapila(pila-vacia) = pila-vacia .
+ eq desapila(apila(N, P)) = P .
+
+ *** La función cima es parcial, denotado por la flecha ~>. No es necesario escribir
+ *** los casos de error.
+ op cima : Pila ~> Nat .
+ eq cima(apila(N, P)) = N .
+endfm
+
+*** La pila con solo 7 se escribe apila(7, pila-vacia).
+red apila(7, pila-vacia) .
+
+*** La pila con 3 en la cima y 7 debajo se escribe apila(3, apila(7, pila-vacia))
+red apila(3, apila(7, pila-vacia)) .
+
+*** Si desapilamos nos quedamos con la anterior:
+red desapila(apila(3, apila(7, pila-vacia))) .
+
+*** La cima de la pila desapilada es 7
+red cima(desapila(apila(3, apila(7, pila-vacia)))) .
+
+fmod PILA-EXT is
+ pr PILA .
+
+ vars N N' : Nat .
+ var  P : Pila .
+
+ op esta? : Pila Nat -> Bool .
+ eq esta?(pila-vacia, N) = false .
+ eq esta?(apila(N, P), N') = if N == N'
+                             then true
+                             else esta?(P, N')
+                             fi .
+
+ ***( Otras posibilidades:
+   - Con ecuaciones condicionales:
+   eq esta?(pila-vacia, N) = false .
+   eq esta?(apila(N, P), N) = true .
+   ceq esta?(apila(N, P), N') = esta?(P, N')
+    if N =/= N' .
+   - Con el atributo otherwise.
+   eq esta?(pila-vacia, N) = false .
+   eq esta?(apila(N, P), N) = true .
+   eq esta?(apila(N, P), N') = esta?(P, N') [owise] .
+ )
+
+ op esVacia? : Pila -> Bool .
+ eq esVacia?(pila-vacia) = true .
+ eq esVacia?(P) = true [owise] .
+endfm

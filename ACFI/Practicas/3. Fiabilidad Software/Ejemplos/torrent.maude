@@ -1,0 +1,152 @@
+fmod FICHEROS is
+ pr NAT .
+
+ sorts Parts File Files .
+ subsort Nat < Parts .
+ subsort File < Files .
+
+ op mt : -> Parts .
+ op __ : Parts Parts -> Parts [ctor assoc id: mt] .
+
+ *** ID NumParts Parts
+ op [_,_,_] : Nat Nat Parts -> File [ctor] .
+
+ op noFiles : -> Files [ctor] .
+ op __ : Files Files -> Files [ctor assoc comm id: noFiles] .
+
+ vars N N' ID : Nat .
+ var  FS : Files .
+ var  P : Parts .
+ var  F : File .
+
+ op |_| : Parts -> Nat .
+ eq | mt | = 0 .
+ eq | N P | = s(| P |) .
+
+ op complete? : File -> Bool .
+ eq complete?([ ID, N, P ]) = | P | == N .
+
+ op _[_] : Files Nat ~> File .
+ eq ([ ID, N, P ] FS)[ID] = [ ID, N, P ] .
+
+ op complete? : Files Nat -> Bool .
+ eq complete?(FS, ID) = complete?(FS[ID]) .
+
+ op allComplete? : Files -> Bool .
+ eq allComplete?(noFiles) = true .
+ eq allComplete?(F FS) = complete?(F) and allComplete?(FS) .
+
+ op next : File ~> Nat .
+ eq next([ ID, N, P ]) = next(0 P, N) .
+
+ op next : Parts Nat ~> Nat .
+ eq next(N s(N) P, N') = next(s(N) P, N') .
+ eq next(N s(s(N)) P, N') = s(N) .
+ ceq next(N, N') = s(N)
+  if N < N' .
+
+ op getId : File -> Nat .
+ eq getId([ID, N, P]) = ID .
+
+ op add : Parts Nat ~> Parts .
+ eq add(mt, N) = N .
+ ceq add(N P, N') = N' N P
+  if N' < N .
+ ceq add(N P, N') = N add(P, N')
+  if N' > N .
+endfm
+
+mod SYS is
+ pr FICHEROS .
+
+ sorts St Serv Msj Sys .
+ subsort Serv Msj < Sys .
+
+ ops idle wait : -> St [ctor] .
+
+ op none : -> Sys [ctor] .
+ op __ : Sys Sys -> Sys [ctor assoc comm id: none] .
+
+ op [_|_,_] : Nat Files St -> Serv [ctor] .
+ op _requires_from_ : Nat Nat Nat -> Msj [ctor] .
+ op to_part_from_ : Nat Nat Nat -> Msj [ctor] .
+
+ vars ID ID' N N' TAM : Nat .
+ var  FS : Files .
+ var  F : File .
+ var  S : St .
+ vars PS PS' : Parts .
+
+ crl [ask] :
+     [ID | F FS, idle]
+  => [ID | F FS, wait]
+     (ID requires N from N')
+  if not complete?(F) /\
+     N := next(F) /\
+     N' := getId(F) .
+
+ rl [answer] :
+    (ID requires N from N')
+    [ID' | [N', TAM, PS N PS'] FS, S]
+ => [ID' | [N', TAM, PS N PS'] FS, S]
+    (to ID part N from N') .
+
+ rl [receive] :
+    (to ID part N from N')
+    [ID | [N', TAM, PS] FS, wait]
+ => [ID | [N', TAM, add(PS, N)] FS, idle] .
+endm
+
+mod TEST is
+ pr SYS .
+
+ op init : -> Sys .
+ eq init =
+    [ 1 | [1, 3, mt] [2, 3, 1 2 3], idle]
+    [ 2 | [1, 3, 1 2 3] [2, 3, mt], idle] .
+endm
+
+load model-checker.maude
+
+mod PROPS is
+ pr SYS .
+ pr SATISFACTION .
+
+ subsort Sys < State .
+
+ *** Un cierto fichero de un cierto servidor está completo
+ op complete : Nat Nat -> Prop [ctor] .
+ *** Todos los ficheros de todos los servidores están completos
+ op allComplete : -> Prop [ctor] .
+ *** Hay un mensaje de un cierto servidor sobre un cierto fichero
+ op _asksFor_ : Nat Nat -> Prop [ctor] .
+
+ vars N N' TAM ID : Nat .
+ var  S : Sys .
+ var  ST : St .
+ var  FS : Files .
+ var  SRV : Serv .
+
+
+ eq S [ID | FS, ST ] |= complete(ID, N) = complete?(FS, N) .
+ eq S |= allComplete = allServersComplete(S) .
+ eq S (ID requires N' from N) |= ID asksFor N = true .
+
+ op allServersComplete : Sys -> Bool .
+ eq allServersComplete(S [ID | FS, ST ]) = allComplete?(FS) and allServersComplete(S) .
+ eq allServersComplete(S) = true [owise] .
+endm
+
+mod MC is
+ pr LTL-SIMPLIFIER .
+ pr MODEL-CHECKER .
+ pr PROPS .
+ pr TEST .
+endm
+
+red modelCheck(init, <> [] complete(1, 1)) .
+red modelCheck(init, <> [] allComplete) .
+red modelCheck(init, <> (1 asksFor 1)) .
+red modelCheck(init, [] ((1 asksFor 1) -> <> complete(1, 1))) .
+
+
