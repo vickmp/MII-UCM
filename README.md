@@ -1,0 +1,77 @@
+# Master en Ingeniería Informática
+
+Repositorio de los trabajos y prácticas realizadas en el [Master Universitario en Ingiería Informática de la Universidad Complutense de Madrid (UCM)](https://informatica.ucm.es/master-en-ingenieria-informatica).
+
+## Plan de estudios
+
+El plan de estudios realizado consta de la siguiente estructura:
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-lboi{border-color:inherit;text-align:left;vertical-align:middle}
+.tg .tg-attk{background-color:#efefef;border-color:inherit;color:#000000;text-align:left;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-attk">Módulos</th>
+    <th class="tg-attk">Materias</th>
+    <th class="tg-attk">Asignaturas</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-lboi" rowspan="2">Dirección y Gestión</td>
+    <td class="tg-lboi">Métodos, Técnicas y Herramientas de Dirección y Gestión</td>
+    <td class="tg-0pky">Dirección y gestión de proyectos software (DGP)</td>
+  </tr>
+  <tr>
+    <td class="tg-lboi">Consultoría Informática</td>
+    <td class="tg-0pky">Gestión de empresas de base tecnológica y sistemas informáticos (EBT)</td>
+  </tr>
+  <tr>
+    <td class="tg-lboi" rowspan="8">Tecnologías Informáticas</td>
+    <td class="tg-lboi" rowspan="5">Ingeniería del Software y Sistemas Informáticos</td>
+    <td class="tg-0pky">Gráficos por computador (GC)</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">Tecnologías multimedia e interacción (TMI)</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">Sistemas de gestión de datos y de la información (SGDI)</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">Desarrollo de aplicaciones y servicios inteligentes (DASI)</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">Auditoría, calidad y fiabilidad informáticas (ACFI)</td>
+  </tr>
+  <tr>
+    <td class="tg-lboi" rowspan="3">Arquitectura y Redes de Computadores</td>
+    <td class="tg-0pky">Sistemas empotrados distribuidos (SED)</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">Redes de nueva generación e Internet (RNG)</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">Computación de altas prestaciones y aplicaciones (CAP)</td>
+  </tr>
+  <tr>
+    <td class="tg-lboi" rowspan="3">Complementos de Ingeniería Informática</td>
+    <td class="tg-lboi" rowspan="2">Complementos de Ingeniería del Software y Sistemas Informáticos</td>
+    <td class="tg-0pky">Optimización (OPTI)</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">Ingeniería del software dirigida por modelos (IDM)</td>
+  </tr>
+  <tr>
+    <td class="tg-lboi">Complementos de Arquitectura y Redes de Computadores</td>
+    <td class="tg-0pky">Arquitectura del nodo IoT (ANIOT)</td>
+  </tr>
+</tbody>
+</table>
